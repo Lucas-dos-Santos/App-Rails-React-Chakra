@@ -1,12 +1,14 @@
 import { ReactNode, createContext, useReducer } from 'react'
 import { userReducer } from '../reducers/user/reducer'
-import { signInUserAction } from '../reducers/user/actions'
+import { signInUserAction, signOutUserAction } from '../reducers/user/actions'
 import {
-  getAuthUser,
-  signInUser,
   signUpUser,
+  signInUser,
+  signOutUser,
+  getAuthUser,
 } from '../services/auth/auth-service'
 import { useToast } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 
 export interface UserType {
   id: number
@@ -25,12 +27,14 @@ interface UserContextType {
   user: UserType
   onSignInUser: (data: onSignUserType) => void
   onSignUpUser: (data: onSignUserType) => void
+  onSignOutUser: () => void
 }
 
 export const UserContext = createContext({} as UserContextType)
 
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const toast = useToast()
+  const navigate = useNavigate()
   const [userState, dispatch] = useReducer(
     userReducer,
     {
@@ -46,6 +50,8 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
       return initialState
     },
   )
+
+  const { user } = userState
 
   async function onSignInUser(data: onSignUserType) {
     const response = await signInUser(data)
@@ -92,10 +98,17 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  const { user } = userState
+  async function onSignOutUser() {
+    await signOutUser()
+    localStorage.removeItem('authUser')
+    dispatch(signOutUserAction())
+    navigate('/signin')
+  }
 
   return (
-    <UserContext.Provider value={{ user, onSignInUser, onSignUpUser }}>
+    <UserContext.Provider
+      value={{ user, onSignInUser, onSignUpUser, onSignOutUser }}
+    >
       {children}
     </UserContext.Provider>
   )

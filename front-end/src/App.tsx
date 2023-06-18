@@ -7,11 +7,11 @@ import { UserContextProvider } from './contexts/userContext'
 const App = () => {
   return (
     <ChakraProvider theme={defaultTheme} toastOptions={toastOptions}>
-      <UserContextProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <UserContextProvider>
           <Router />
-        </BrowserRouter>
-      </UserContextProvider>
+        </UserContextProvider>
+      </BrowserRouter>
     </ChakraProvider>
   )
 }

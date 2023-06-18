@@ -9,7 +9,7 @@ function SignInPage() {
 
   useEffect(() => {
     if (user) {
-      navigate('/profile')
+      navigate('/')
     }
   }, [user, navigate])
   return <FormSignin />

@@ -20,7 +20,7 @@ interface MobileProps {
 }
 
 const MobileNav = ({ onOpen }: MobileProps) => {
-  const { user } = useContext(UserContext)
+  const { user, onSignOutUser } = useContext(UserContext)
 
   return (
     <Flex
@@ -74,7 +74,7 @@ const MobileNav = ({ onOpen }: MobileProps) => {
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem onClick={onSignOutUser}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

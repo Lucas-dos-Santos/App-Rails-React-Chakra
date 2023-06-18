@@ -9,9 +9,7 @@ instance.interceptors.request.use(
   (config) => {
     const authUser = getAuthUser()
     if (authUser) {
-      console.log('nao pode cair aki *************')
-      console.log(authUser)
-      config.headers.authorization = `Bearer ${authUser.access_token}`
+      config.headers.authorization = authUser.accessToken
     }
     return config
   },
@@ -34,26 +32,34 @@ instance.interceptors.response.use(
   },
 )
 
-interface getProps {
+interface httpProps {
   url: string
-  params: Object
   config?: Object
+}
+interface getProps extends httpProps {
+  params: Object
 }
 
 const get = ({ url, params, config = {} }: getProps) => {
   return instance.get(url, { params, ...config })
 }
 
-interface postProps {
-  url: string
+interface postProps extends httpProps {
   data: Object
-  config?: Object
 }
 
 const post = ({ url, data, config = {} }: postProps) => {
   return instance.post(url, data, config)
 }
 
-const httpClient = { get, post }
+const destroy = ({ url }: httpProps) => {
+  const authUser = getAuthUser()
+  const headers = {
+    authorization: authUser.accessToken,
+  }
+  return instance.delete(url, { headers })
+}
+
+const httpClient = { get, post, destroy }
 
 export default httpClient
