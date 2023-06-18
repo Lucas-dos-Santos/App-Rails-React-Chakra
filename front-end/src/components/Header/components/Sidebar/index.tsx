@@ -2,6 +2,7 @@ import {
   Box,
   Flex,
   Text,
+  BoxProps,
   CloseButton,
   useColorModeValue,
 } from '@chakra-ui/react'
@@ -28,11 +29,11 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Settings', icon: FiSettings },
 ]
 
-interface SidebarProps {
+interface SidebarProps extends BoxProps {
   onClose: () => void
 }
 
-const Sidebar = ({ onClose }: SidebarProps) => {
+const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
       transition="3s ease"
@@ -42,7 +43,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"
-      display={{ base: 'none', md: 'block' }}
+      {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
