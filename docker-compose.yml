@@ -13,3 +13,46 @@ services:
       - ./front-end:/front-end
     ports:
       - 3001:3001
+
+  personal_rails_api:
+    container_name: personal_rails_api
+    build: ./rails-api
+    command: bash -c "cd rails-api && rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/usr/src/rails-api
+    expose:
+      - "3000"
+    ports:
+      - 3000:3000
+    stdin_open: true
+    tty: true
+    env_file: ./rails-api/.env.development
+    environment:
+      RAILS_ENV: development
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:14-alpine
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:6.0.12-alpine
+    command: redis-server
+    volumes:
+      - redis:/data
+    ports:
+      - "127.0.0.1:6379:6379"
+    logging:
+      driver: none
+
+volumes:
+  postgresql:
+  redis:
