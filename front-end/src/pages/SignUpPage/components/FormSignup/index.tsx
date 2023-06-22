@@ -17,7 +17,7 @@ import { UserContext } from '../../../../contexts/userContext'
 import { useContext, useState } from 'react'
 
 const FormSignupValidationSchema = zod.object({
-  fullName: zod.string().min(1, 'This field has to be filled'),
+  name: zod.string().min(1, 'This field has to be filled'),
   email: zod
     .string()
     .min(1, { message: 'This field has to be filled.' })
@@ -37,7 +37,7 @@ const FormSignup = () => {
   } = useForm<FormSignupData>({
     resolver: zodResolver(FormSignupValidationSchema),
     defaultValues: {
-      fullName: '',
+      name: '',
       email: '',
       password: '',
     },
@@ -75,9 +75,9 @@ const FormSignup = () => {
             <Stack spacing={4}>
               <InputGeneric
                 type="text"
-                name="fullName"
+                name="name"
                 label="Full Name"
-                error={errors.fullName?.message}
+                error={errors.name?.message}
                 register={register}
               />
               <InputGeneric
